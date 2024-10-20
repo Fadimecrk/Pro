@@ -1,0 +1,58 @@
+using System;
+using System.Collections.Generic;
+using System.Threading;
+
+class Program
+{
+    static int width = 100;
+    static int height = 25;
+    static List<Person> persons = new List<Person>();
+    static int robbedCitizens = 0;
+    static int arrestedThieves = 0;
+
+    static void Main()
+    {
+        InitCity();
+        bool running = true;
+
+        while (running)
+        {
+            MovePersons();
+            DrawCity();
+            Thread.Sleep(100); // Pausa för att se rörelsen
+
+            // Kolla om någon interagerar
+            if (CheckInteractions())
+            {
+                running = false;
+            }
+        }
+
+        Console.WriteLine($"Staden har nu stängt. Rånade medborgare: {robbedCitizens}, Gripna tjuvar: {arrestedThieves}");
+    }
+
+    static void InitCity()
+    {
+        Random random = new Random();
+        // Skapa medborgare
+        for (int i = 0; i < 30; i++)
+        {
+            persons.Add(CreatePerson("medborgare"));
+        }
+        // Skapa tjuvar
+        for (int i = 0; i < 20; i++)
+        {
+            persons.Add(CreatePerson("tjuv"));
+        }
+        // Skapa poliser
+        for (int i = 0; i < 10; i++)
+        {
+            persons.Add(CreatePerson("polis"));
+        }
+    }
+
+    static Person CreatePerson(string type)
+    {
+        Random random = new Random();
+        var position = (random.Next(0, width), random.Next(0, height));
+        int xDirection = random.Next(-1, 2);
